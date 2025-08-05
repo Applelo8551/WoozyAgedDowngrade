@@ -589,6 +589,7 @@
                         });
 
                         const data = await response.json();
+                        console.log("n8n initialization response:", data);
 
                         if (data.resumeUrl) {
                             // Store resume URL for the search form
@@ -610,8 +611,8 @@
                         } else {
                             // Handle direct response without resumeUrl
                             status.className = "status-indicator error";
-                            status.innerHTML =
-                                "<span>⚠</span><span>No resume URL received</span>";
+                            status.innerHTML = `<span>⚠</span><span>n8n回應異常: ${JSON.stringify(data)}</span>`;
+                            console.error("Expected resumeUrl but got:", data);
                         }
                     } catch (error) {
                         console.error("Error starting workflow:", error);
