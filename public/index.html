@@ -766,34 +766,22 @@
                                 resumeUrl = responseData.resumeUrl;
                             }
 
+                            // Store results in localStorage and redirect to results page
+                            localStorage.setItem('propertySearchResults', htmlContent);
+                            
+                            // Show success message briefly before redirect
                             results.innerHTML = `
-                            <h3>Property Search Results 物業查詢結果</h3>
-                            <div class="table-wrapper" style="overflow-x: auto; margin-top: 20px;">
-                                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">用戶地址</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">類型</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">地區</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">地址</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">樓層</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">單位</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">面積</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">價格</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">日期</th>
-                                            <th style="border: 1px solid #ddd; padding: 12px 8px; background-color: #daf2d0; color: black; font-weight: 600;">連結</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${htmlContent}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div style="margin-top: 20px; padding: 16px; background-color: #f0f8ff; border-radius: 8px; font-size: 14px; color: #666;">
-                                <strong>Search completed successfully!</strong> Found ${htmlContent.split("<tr>").length - 1} property records.
-                            </div>
-                        `;
+                                <div style="text-align: center; padding: 40px;">
+                                    <h3 style="color: #30d158;">✓ 搜索完成！</h3>
+                                    <p>正在跳轉到結果頁面...</p>
+                                </div>
+                            `;
                             results.className = "results success";
+                            
+                            // Redirect to results page after a brief delay
+                            setTimeout(() => {
+                                window.location.href = '/results.html';
+                            }, 1500);
                         } else {
                             // Show workflow status or no results
                             if (
