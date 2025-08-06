@@ -63,7 +63,28 @@
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      overflow-x: auto;
+      overflow: auto;
+      user-select: none;
+      position: relative;
+    }
+
+    .table-wrapper::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 6px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 6px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
     }
 
     table {
@@ -250,6 +271,34 @@
     });
 
     function displayResults(htmlRows) {
+      // Check for success/failure response from n8n
+      try {
+        const response = JSON.parse(htmlRows);
+        if (response.response === "successful") {
+          document.getElementById('loading').innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+              <div style="color: #30d158; font-size: 48px; margin-bottom: 20px;">✓</div>
+              <h3 style="color: #30d158;">搜索成功完成！</h3>
+              <p>物業價格查詢已成功處理</p>
+              <button class="back-btn" onclick="goBack()" style="margin-top: 20px;">返回搜索</button>
+            </div>
+          `;
+          return;
+        } else if (response.response === "unsuccessful") {
+          document.getElementById('loading').innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+              <div style="color: #ff3b30; font-size: 48px; margin-bottom: 20px;">✗</div>
+              <h3 style="color: #ff3b30;">搜索失敗</h3>
+              <p>物業價格查詢處理失敗，請重試</p>
+              <button class="back-btn" onclick="goBack()" style="margin-top: 20px;">返回搜索</button>
+            </div>
+          `;
+          return;
+        }
+      } catch (e) {
+        // Not a JSON response, continue with HTML processing
+      }
+
       if (!htmlRows || htmlRows.trim() === '') {
         document.getElementById('loading').innerHTML = `
           <h3>沒有找到匹配的物業</h3>
@@ -270,6 +319,52 @@
       
       // Insert HTML rows into table
       document.getElementById('results-tbody').innerHTML = htmlRows;
+      
+      // Initialize draggable table functionality
+      initializeDraggableTable();
+    }
+
+    function initializeDraggableTable() {
+      const table = document.querySelector('table');
+      const tableWrapper = document.querySelector('.table-wrapper');
+      let isDown = false;
+      let startX;
+      let startY;
+      let scrollLeft;
+      let scrollTop;
+
+      tableWrapper.addEventListener('mousedown', (e) => {
+        isDown = true;
+        tableWrapper.style.cursor = 'grabbing';
+        startX = e.pageX - tableWrapper.offsetLeft;
+        startY = e.pageY - tableWrapper.offsetTop;
+        scrollLeft = tableWrapper.scrollLeft;
+        scrollTop = tableWrapper.scrollTop;
+      });
+
+      tableWrapper.addEventListener('mouseleave', () => {
+        isDown = false;
+        tableWrapper.style.cursor = 'grab';
+      });
+
+      tableWrapper.addEventListener('mouseup', () => {
+        isDown = false;
+        tableWrapper.style.cursor = 'grab';
+      });
+
+      tableWrapper.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - tableWrapper.offsetLeft;
+        const y = e.pageY - tableWrapper.offsetTop;
+        const walkX = (x - startX) * 2;
+        const walkY = (y - startY) * 2;
+        tableWrapper.scrollLeft = scrollLeft - walkX;
+        tableWrapper.scrollTop = scrollTop - walkY;
+      });
+
+      // Add grab cursor style
+      tableWrapper.style.cursor = 'grab';
     }
   </script>
 </body>

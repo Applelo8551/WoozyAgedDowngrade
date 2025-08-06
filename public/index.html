@@ -751,6 +751,27 @@
                             return; // Exit early, don't reset button
                         }
 
+                        // Handle success/failure response from n8n
+                        if (data && data.response) {
+                            // Store the response and redirect to results page
+                            localStorage.setItem('propertySearchResults', JSON.stringify(data));
+                            
+                            // Show success message briefly before redirect
+                            results.innerHTML = `
+                                <div style="text-align: center; padding: 40px;">
+                                    <h3 style="color: #30d158;">✓ 搜索完成！</h3>
+                                    <p>正在跳轉到結果頁面...</p>
+                                </div>
+                            `;
+                            results.className = "results success";
+                            
+                            // Redirect to results page after a brief delay
+                            setTimeout(() => {
+                                window.location.href = '/results.html';
+                            }, 1500);
+                            return;
+                        }
+
                         // Handle new n8n response format: [{"htmlRows": "...", "resumeUrl": "..."}]
                         if (
                             data &&
