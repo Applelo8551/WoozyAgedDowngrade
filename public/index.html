@@ -359,7 +359,7 @@
                     <p class="start-description">
                         Start your property search journey. We'll initialize our
                         search system and prepare everything you need to find
-                        the perfect property in Hong Kong.
+                        the property in Hong Kong.
                     </p>
                     <button id="startWorkflowBtn" class="start-btn">
                         Initialize Search System
@@ -522,7 +522,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="unit-area"
-                                >Unit Area 單位面積(平方米)</label
+                                >Unit Area 單位面積(呎)</label
                             >
                             <input
                                 type="number"
@@ -754,8 +754,11 @@
                         // Handle success/failure response from n8n
                         if (data && data.response) {
                             // Store the response and redirect to results page
-                            localStorage.setItem('propertySearchResults', JSON.stringify(data));
-                            
+                            localStorage.setItem(
+                                "propertySearchResults",
+                                JSON.stringify(data),
+                            );
+
                             // Show success message briefly before redirect
                             results.innerHTML = `
                                 <div style="text-align: center; padding: 40px;">
@@ -764,10 +767,10 @@
                                 </div>
                             `;
                             results.className = "results success";
-                            
+
                             // Redirect to results page after a brief delay
                             setTimeout(() => {
-                                window.location.href = '/results.html';
+                                window.location.href = "/results.html";
                             }, 1500);
                             return;
                         }
@@ -788,8 +791,11 @@
                             }
 
                             // Store results in localStorage and redirect to results page
-                            localStorage.setItem('propertySearchResults', htmlContent);
-                            
+                            localStorage.setItem(
+                                "propertySearchResults",
+                                htmlContent,
+                            );
+
                             // Show success message briefly before redirect
                             results.innerHTML = `
                                 <div style="text-align: center; padding: 40px;">
@@ -798,10 +804,10 @@
                                 </div>
                             `;
                             results.className = "results success";
-                            
+
                             // Redirect to results page after a brief delay
                             setTimeout(() => {
-                                window.location.href = '/results.html';
+                                window.location.href = "/results.html";
                             }, 1500);
                         } else {
                             // Show workflow status or no results
